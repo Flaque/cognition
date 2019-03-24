@@ -2,7 +2,14 @@ import * as express from "express";
 import { parse } from "url";
 import * as next from "next";
 import Track from "./track";
-import { usage, getUsage, setUsage } from "./usage";
+import {
+  usage,
+  getUsage,
+  setUsage,
+  getUsageList,
+  setBudget,
+  getBudget
+} from "./usage";
 
 const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== "production";
@@ -25,6 +32,20 @@ app.prepare().then(() => {
     console.log(usage);
 
     res.status(200).send("ok");
+  });
+
+  server.post("/api/budget/:budget", (req, res) => {
+    setBudget(req.params.budget);
+    res.status(200).send("ok");
+  });
+
+  // gets list
+  server.get("/api/usages", (_, res) => {
+    const list = getUsageList();
+    res.status(200).json({
+      usages: list,
+      budget: getBudget()
+    });
   });
 
   // Gets usage info for a particular user
