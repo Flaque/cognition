@@ -52,7 +52,10 @@ app.prepare().then(() => {
   server.get("/api/usage/:userId", (req, res) => {
     const { userId } = req.params;
 
-    res.status(200).json(getUsage(userId));
+    res.status(200).json({
+      usage: getUsage(userId),
+      budget: getBudget()
+    });
   });
 
   // Makes sure the service is still alive
